@@ -1,0 +1,20 @@
+[telegram]
+authorized_ids=xxxx
+bottoken=12345:asdjkdfiii
+
+## only support socks5 proxy
+use_proxy=1
+proxy_url=127.0.0.1:1080 
+
+[log]
+logfile=./logs/botdefault.log
+
+[cmdlist]
+dir={"cmd":"dir %s","params":["EFILE"]}
+cat={"cmd":"cat %s","params":["EFILE"]}
+ls={"cmd":"ls %s","params":["EFILE"]}
+tail={"cmd":"tail -n %s %s","params":["NUMBER", "EFILE"]}
+head={"cmd":"head -n %s %s","params":["NUMBER", "EFILE"]}
+ps={"cmd":"ps %s","params":["PMSIGN"]}
+netstat={"cmd":"netstat %s","params":["PMSIGN"]}
+kill={"cmd":"kill -9 %s","params":["NUMBER"]}
