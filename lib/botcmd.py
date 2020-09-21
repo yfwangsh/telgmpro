@@ -38,7 +38,7 @@ class cmdProcessor():
         for key, option in optss:
             self.cmd_dic[key] = option
             
-    def run(self, key, params):
+    def run(self, key, params, log=None):
         cmdstr = self.cmd_dic.get(key)
         if cmdstr is None:
             cmdtup = self.internal.get(key)
@@ -59,6 +59,8 @@ class cmdProcessor():
                 if not paramChecker.check(params[i], ptype, opt):
                     return 4, 'fail param type check'
             cmdstr = jsonobj['cmd'] %tuple(params[:len(objparam)])
+        if log is not None:
+            log.debug("exec run cmdstr:%s"%(cmdstr))
         ret = self.runcmd(cmdstr)
         return ret[0], ret[1]
 

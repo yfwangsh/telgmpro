@@ -81,7 +81,7 @@ class cmdhandler(handler):
                 params = context.args[1:]
         else:
             context.bot.send_message(chat_id=update.effective_chat.id, text='no executed command provide')
-        ret, msg = self.cmdp.run(cmd, params)
+        ret, msg = self.cmdp.run(cmd, params, self.log)
         try:
             if type(msg) == bytes:
                 msg = msg.decode()
