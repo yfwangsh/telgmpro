@@ -13,7 +13,7 @@ class reloadhandler(handler):
         self.weight = 3
         self.name = 'reload'
         self.needauth = True
-        self.myhandler = CommandHandler(self.name, self.worker)
+        self.myhandler = CommandHandler(self.name, self.worker ,filters=self.getFilters())
     def proceed(self, update, context):
         if self.bot is not None:
             self.bot.reload()

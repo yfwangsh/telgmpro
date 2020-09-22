@@ -3,7 +3,7 @@ from telegram.ext import MessageHandler, Filters
 from lib.common import mylogging
 from lib.botlib import handler
 from lib.botcmd import cmdProcessor
-
+from telegram.ext import BaseFilter
 def loadhandlers():
     return [defaulthandler, starthandler,cmdhandler]
 
@@ -18,22 +18,22 @@ class starthandler(handler):
         self.version='1.0'
         self.weight = 6
         self.name = 'start'
-        self.myhandler = CommandHandler(self.name, self.worker)
+        self.myhandler = CommandHandler(self.name, self.worker, filters=self.getFilters())
 
     def proceed(self, update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text='Greetings,you can talk to me now')
+
 
 class testhandler(handler):
     def __init__(self, conf=None):
         super(testhandler, self).__init__(conf)
         self.version='1.0'
-        self.weight = 2
+        self.weight = 3
         self.name = 'test'
-        self.myhandler = CommandHandler(self.name, self.worker)
+        self.myhandler = MessageHandler(Filters.all, self.worker)
 
     def proceed(self, update, context):
-        text_caps = ' '.join(context.args).upper()
-        context.bot.send_message(chat_id=update.effective_chat.id, text=text_caps)
+        context.bot.send_message(chat_id=update.effective_chat.id, text='This is a test')
 
 class mediahandler(handler):
     def __init__(self, conf=None):
@@ -41,7 +41,7 @@ class mediahandler(handler):
         self.version='1.0'
         self.weight = 3
         self.name = 'media'
-        self.myhandler = MessageHandler(Filters.photo | Filters.video, self.worker)
+        self.myhandler = MessageHandler(self.getFilters((Filters.photo | Filters.video)), self.worker)
     def proceed(self, update, context):
         photoes = update.effective_message.photo
         filesize = 0
@@ -68,7 +68,7 @@ class cmdhandler(handler):
         self.weight = 2
         self.name = 'exec'
         self.needauth = True
-        self.myhandler = CommandHandler(self.name, self.worker)
+        self.myhandler = CommandHandler(self.name,self.worker, filters=self.getFilters())
         self.cmdp = cmdProcessor(self.conf)
     
     def proceed(self, update, context):

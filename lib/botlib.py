@@ -12,10 +12,17 @@ class handler():
         self.name = 'default'
         self.registered = True
         self.log = mylogging(conf).getLogger()
-        self.myhandler = MessageHandler(Filters.command, self.worker)
+        self.myhandler = MessageHandler(self.getFilters(Filters.command), self.worker)
         self.conf = conf
         self.needauth = False
         self.bot = None
+    
+    ## this bot default to work on private chat
+    def getFilters(self, newfilter=None): 
+        if newfilter is None:
+            return Filters.private
+        return Filters.private & newfilter 
+        
     def worker(self, update, context):
         if self.doauthorized(update):
             self.proceed(update, context)
